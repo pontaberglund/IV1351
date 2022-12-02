@@ -176,21 +176,11 @@ CREATE TABLE individual_lesson (
  instrument_id INT NOT NULL,
  skill_level_id INT NOT NULL,
  instructor_id INT NOT NULL,
- lesson_price_id INT NOT NULL
+ lesson_price_id INT NOT NULL,
+ time_slot_id INT NOT NULL
 );
 
 ALTER TABLE individual_lesson ADD CONSTRAINT PK_individual_lesson PRIMARY KEY (individual_lesson_id);
-
-
-CREATE TABLE instructor_availability (
- start_time TIME(6) NOT NULL,
- end_time TIME(6) NOT NULL,
- date DATE NOT NULL,
- instructor_id INT NOT NULL,
- individual_lesson_id INT
-);
-
-ALTER TABLE instructor_availability ADD CONSTRAINT PK_instructor_availability PRIMARY KEY (start_time,end_time,date,instructor_id);
 
 
 CREATE TABLE instrument_in_stock  (
@@ -198,7 +188,7 @@ CREATE TABLE instrument_in_stock  (
  instrument_id INT NOT NULL,
  brand VARCHAR(50) NOT NULL,
  price INT NOT NULL,
- rental_id INT NOT NULL
+ rental_id INT
 );
 
 ALTER TABLE instrument_in_stock  ADD CONSTRAINT PK_instrument_in_stock  PRIMARY KEY (instument_in_stock_id);
@@ -274,10 +264,7 @@ ALTER TABLE individual_lesson ADD CONSTRAINT FK_individual_lesson_1 FOREIGN KEY 
 ALTER TABLE individual_lesson ADD CONSTRAINT FK_individual_lesson_2 FOREIGN KEY (skill_level_id) REFERENCES skill_level (skill_level_id);
 ALTER TABLE individual_lesson ADD CONSTRAINT FK_individual_lesson_3 FOREIGN KEY (instructor_id) REFERENCES instructor (instructor_id);
 ALTER TABLE individual_lesson ADD CONSTRAINT FK_individual_lesson_4 FOREIGN KEY (lesson_price_id) REFERENCES lesson_price (lesson_price_id);
-
-
-ALTER TABLE instructor_availability ADD CONSTRAINT FK_instructor_availability_0 FOREIGN KEY (instructor_id) REFERENCES instructor (instructor_id);
-ALTER TABLE instructor_availability ADD CONSTRAINT FK_instructor_availability_1 FOREIGN KEY (individual_lesson_id) REFERENCES individual_lesson (individual_lesson_id);
+ALTER TABLE individual_lesson ADD CONSTRAINT FK_individual_lesson_5 FOREIGN KEY (time_slot_id) REFERENCES time_slot  (time_slot_id);
 
 
 ALTER TABLE instrument_in_stock  ADD CONSTRAINT FK_instrument_in_stock_0 FOREIGN KEY (instrument_id) REFERENCES instrument (instrument_id);
