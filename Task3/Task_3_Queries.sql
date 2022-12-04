@@ -1,5 +1,6 @@
 /*Total, Individual, group and ensemble lessons per month*/
 SELECT
+    date_part('year', tim1.date) AS year,
     date_part('month', tim1.date) AS month,
     COUNT(*) AS total,
     COUNT(individual_lesson_id) AS individual_lesson,
@@ -12,8 +13,7 @@ FROM
     ON tim1.time_slot_id=ens.time_slot_id 
     FULL OUTER JOIN individual_lesson AS ind
     ON tim1.time_slot_id=ind.time_slot_id
-    WHERE tim1.date BETWEEN '2023-01-01' AND '2023-12-31'
-    GROUP BY date_part('month', tim1.date)
+    GROUP BY date_part('month', tim1.date), date_part('year', tim1.date)
     ORDER BY date_part('month', tim1.date);
 
 /*SIBLINGS*/
@@ -85,7 +85,6 @@ FROM
         WHERE date_part('month', time_slot.date)=date_part('month', current_date)
         AND date_part('year', time_slot.date)=date_part('year', current_date))) AS foo
     GROUP BY 1
-    HAVING COUNT(*) > 2
     ORDER BY COUNT(*) DESC;
     
 
@@ -106,7 +105,16 @@ SELECT
     WHEN genre=7 THEN 'Rock'
     ELSE 'X'
     END AS genre,
-    day,
+    CASE
+    WHEN day=1 THEN 'Monday'
+    WHEN day=2 THEN 'Tuesday'
+    WHEN day=3 THEN 'Wednesday'
+    WHEN day=4 THEN 'Thursday'
+    WHEN day=5 THEN 'Friday'
+    WHEN day=6 THEN 'Saturday'
+    WHEN day=7 THEN 'Sunday' 
+    END
+    AS day,
     CASE
     WHEN places-people= 0 THEN 'full'
     WHEN places-people < 2 THEN '1-2 seats left'
@@ -125,7 +133,7 @@ FROM
     ON ens.ensemble_id=stu.ensemble_id
     INNER JOIN time_slot AS tim
     ON ens.time_slot_id=tim.time_slot_id
-    WHERE tim.date BETWEEN '2023-01-01' AND '2023-12-31'
+    WHERE tim.date BETWEEN '2022-12-01' AND '2022-12-07'
     GROUP BY ens.ensemble_id, tim.date
 ) AS f
 ORDER BY genre, day;
@@ -143,7 +151,17 @@ SELECT
     WHEN genre=7 THEN 'Rock'
     ELSE 'X'
     END AS genre,
-    day,
+    CASE
+    WHEN day=1 THEN 'Monday'
+    WHEN day=2 THEN 'Tuesday'
+    WHEN day=3 THEN 'Wednesday'
+    WHEN day=4 THEN 'Thursday'
+    WHEN day=5 THEN 'Friday'
+    WHEN day=6 THEN 'Saturday'
+    WHEN day=7 THEN 'Sunday' 
+    ELSE 'X'
+    END
+    AS day,
     CASE
     WHEN places-people= 0 THEN 'full'
     WHEN places-people < 2 THEN '1-2 seats left'
@@ -162,13 +180,18 @@ FROM
     ON ens.ensemble_id=stu.ensemble_id
     INNER JOIN time_slot AS tim
     ON ens.time_slot_id=tim.time_slot_id
-    WHERE tim.date BETWEEN current_date AND current_date + interval '7 days'
+    WHERE tim.date BETWEEN current_date AND current_date + interval '7 day'
     GROUP BY ens.ensemble_id, tim.date
 ) AS f
 ORDER BY genre, day; 
 
 
 /*Using views*/
+SELECT * FROM lessons_year WHERE year='2022';
 
+SELECT * FROM sibling_amount;
 
+SELECT * FROM instructor_lesson_amount WHERE amount > 0;
+
+SELECT * FROM ensembles_next_week;
 
