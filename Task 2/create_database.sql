@@ -195,7 +195,7 @@ CREATE TABLE instrument_in_stock  (
  instrument_id INT NOT NULL,
  brand VARCHAR(50) NOT NULL,
  price INT NOT NULL,
- rental_id INT NOT NULL
+ rental_id INT
 );
 
 ALTER TABLE instrument_in_stock  ADD CONSTRAINT PK_instrument_in_stock  PRIMARY KEY (instument_in_stock_id);

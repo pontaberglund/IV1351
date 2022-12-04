@@ -1567,13 +1567,13 @@ VALUES
   (49,5),
   (50,7);
 
+
 /*Insert 3 rentals*/
 INSERT INTO rental (student_id,home_delivery,start_date,end_date)
 VALUES
   (76,'1','2022-05-28','2022-06-24'),
   (27,'0','2022-03-07','2022-08-16'),
   (128,'1','2022-03-20','2022-10-07');
-
 
 /*Insert instrument_in_stock*/
 INSERT INTO instrument_in_stock (instrument_id,brand,price,rental_id)
