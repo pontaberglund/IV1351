@@ -34,7 +34,7 @@ WHERE student_id NOT IN (SELECT student_id FROM student_sibling) ORDER BY amount
 
 /*List all instructors who has given moret than a specific number of lessons*/
 
-/*During 2023*/
+/*During 2022*/
 SELECT 
     instructor_id,
     COUNT(*) AS amount
@@ -43,19 +43,19 @@ FROM
         instructor_id
     FROM 
         individual_lesson NATURAL JOIN time_slot
-        WHERE time_slot.date BETWEEN '2023-01-01' AND '2023-12-31')
+        WHERE time_slot.date BETWEEN '2022-01-01' AND '2022-12-31')
     UNION ALL
     (SELECT
         instructor_id
     FROM
         group_lesson NATURAL JOIN time_slot
-        WHERE time_slot.date BETWEEN '2023-01-01' AND '2023-12-31')
+        WHERE time_slot.date BETWEEN '2022-01-01' AND '2022-12-31')
     UNION ALL
     (SELECT
         instructor_id
     FROM
         ensemble NATURAL JOIN time_slot
-        WHERE time_slot.date BETWEEN '2023-01-01' AND '2023-12-31')) AS foo
+        WHERE time_slot.date BETWEEN '2022-01-01' AND '2022-12-31')) AS foo
     GROUP BY 1
     HAVING COUNT(*) > 2
     ORDER BY COUNT(*) DESC;
@@ -130,7 +130,7 @@ FROM
     ON ens.ensemble_id=stu.ensemble_id
     INNER JOIN time_slot AS tim
     ON ens.time_slot_id=tim.time_slot_id
-    WHERE tim.date BETWEEN '2022-12-01' AND '2022-12-07'
+    WHERE tim.date BETWEEN '2022-01-01' AND '2022-12-31'
     GROUP BY ens.ensemble_id, tim.date
 ) AS f
 ORDER BY genre, day;
