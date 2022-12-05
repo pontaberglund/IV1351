@@ -1972,3 +1972,5 @@ INSERT INTO individual_lesson (instructor_id,student_id,lesson_price_id,skill_le
   (148,25),
   (149,25),
   (113, 25);
+
+  REFRESH MATERIALIZED VIEW ensembles_next_week;
