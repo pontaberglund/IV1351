@@ -1,7 +1,17 @@
 INSERT INTO student(student_id, first_name, last_name, person_number, address, zip, city)
 SELECT student_id, first_name, last_name, person_number, address, zip, city
 FROM dblink('dbname=newsgms user=postgres password=password',
-'SELECT student_id, first_name, last_name, person_number, address, zip, city FROM person INNER JOIN student ON person.person_id=student.person_id')
+'SELECT
+    student_id, 
+    first_name, 
+    last_name, 
+    person_number, 
+    address, 
+    zip, 
+    city 
+FROM
+    person INNER JOIN student 
+    ON person.person_id=student.person_id')
 AS student(student_id INT, first_name VARCHAR(50), last_name VARCHAR(50), person_number VARCHAR(12), address VARCHAR(100), zip CHAR(5), city VARCHAR(100));
 
 INSERT INTO lesson(type, date, lesson_id, student_id, start_time, end_time, price)
