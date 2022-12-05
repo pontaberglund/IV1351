@@ -382,7 +382,7 @@ FROM
     ON ens.ensemble_id=stu.ensemble_id
     INNER JOIN time_slot AS tim
     ON ens.time_slot_id=tim.time_slot_id
-    WHERE tim.date BETWEEN current_date AND current_date + interval '7 day'
+    WHERE date_part('week', tim.date)=date_part('week', current_date)
     GROUP BY ens.ensemble_id, tim.date
 ) AS f
 ORDER BY genre, day); 
