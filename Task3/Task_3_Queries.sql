@@ -1,4 +1,4 @@
-/*Total, Individual, group and ensemble lessons per month*/
+/*Total, Individual, group and ensemble lessons per month during 2022*/
 SELECT
     date_part('year', tim1.date) AS year,
     date_part('month', tim1.date) AS month,
@@ -13,6 +13,7 @@ FROM
     ON tim1.time_slot_id=ens.time_slot_id 
     FULL OUTER JOIN individual_lesson AS ind
     ON tim1.time_slot_id=ind.time_slot_id
+    WHERE date_part('year', tim1.date)='2022'
     GROUP BY date_part('month', tim1.date), date_part('year', tim1.date)
     ORDER BY date_part('month', tim1.date);
 
@@ -31,7 +32,7 @@ SELECT COUNT(student_id), 0
 FROM student 
 WHERE student_id NOT IN (SELECT student_id FROM student_sibling) ORDER BY amount_of_siblings;
 
-/*List all instructors who has given moret than a specific number of lessons during the current month*/
+/*List all instructors who has given moret than a specific number of lessons*/
 
 /*During 2023*/
 SELECT 
@@ -87,10 +88,6 @@ FROM
     GROUP BY 1
     ORDER BY COUNT(*) DESC;
     
-
-
-
-
 /* ENSEMBLES */
 /*All ensembles during 2022*/
 SELECT 
@@ -180,11 +177,10 @@ FROM
     ON ens.ensemble_id=stu.ensemble_id
     INNER JOIN time_slot AS tim
     ON ens.time_slot_id=tim.time_slot_id
-    WHERE date_part('week', tim.date)=date_part('week', current_date)
+    WHERE date_part('week', tim.date)=date_part('week', current_date)+1
     GROUP BY ens.ensemble_id, tim.date
 ) AS f
 ORDER BY genre, day; 
-
 
 /*Using views*/
 SELECT * FROM lessons_year WHERE year='2022';

@@ -341,7 +341,7 @@ FROM
     ORDER BY COUNT(*) DESC);
 
 
-CREATE VIEW ensembles_next_week AS
+CREATE MATERIALIZED VIEW ensembles_next_week AS
 (SELECT 
     id,
     CASE 
@@ -382,7 +382,7 @@ FROM
     ON ens.ensemble_id=stu.ensemble_id
     INNER JOIN time_slot AS tim
     ON ens.time_slot_id=tim.time_slot_id
-    WHERE date_part('week', tim.date)=date_part('week', current_date)
+    WHERE date_part('week', tim.date)=date_part('week', current_date)+1
     GROUP BY ens.ensemble_id, tim.date
 ) AS f
 ORDER BY genre, day); 
