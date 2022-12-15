@@ -18,7 +18,7 @@ public class SoundGoodMusicSchool {
             String option = sc.next();
             switch (option) {
                 case "1" -> {
-                    System.out.println("Specify which instrument or all");
+                    System.out.println("Specify which instrument (Guitar, Harp, Viola ...) or all");
                     String choice = sc.next();
                     if(choice.equals("all"))
                         db.ReadInstrumentsInStock(conn);
