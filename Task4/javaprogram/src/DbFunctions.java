@@ -136,6 +136,7 @@ public class DbFunctions {
                 System.out.println("Home delivery: " + result.getString("home_delivery"));
                 System.out.println();
             }
+            conn.commit();
         } catch (Exception e) {
             System.out.println(e);
         }
