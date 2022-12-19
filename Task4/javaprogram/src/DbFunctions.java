@@ -105,9 +105,12 @@ public class DbFunctions {
             if(rs.next())
                 latestRental = rs.getString("rental_id");
             //Connect the rental to wanted instrument
-            String query3 = String.format("update instrument_in_stock set rental_id=%s where instrument_in_stock_id=%s", latestRental, instrumentID);
+            String query3 = String.format("select * from instrument_in_stock where instrument_in_stock_id=%s for update", instrumentID);
+            String query4 = String.format("update instrument_in_stock set rental_id=%s where instrument_in_stock_id=%s", latestRental, instrumentID);
+            //Lock the instrument_in_stock
+            statement.executeQuery(query3);
             //Update the row
-            updatedRows = statement.executeUpdate(query3);
+            updatedRows = statement.executeUpdate(query4);
             if(updatedRows != 1) {
                 conn.rollback();
                 System.out.println("Something went wrong with the update on query 4");
@@ -180,11 +183,14 @@ public class DbFunctions {
             if(price.next())
                 price_of_instrument = price.getString("price");
             //Update instrument_in_stock
-            String query3 = String.format("update instrument_in_stock set rental_id=null where rental_id=%s", rid);
-            updatedRows = statement.executeUpdate(query3);
+            //Lock the instrument_in_stock
+            String query3 = String.format("select * from instrument_in_stock where rental_id=%s for update", rid);
+            statement.executeQuery(query3);
+            String query4 = String.format("update instrument_in_stock set rental_id=null where rental_id=%s", rid);
+            updatedRows = statement.executeUpdate(query4);
             if(updatedRows != 1) {
                 conn.rollback();
-                System.out.println("Something went wrong with the update on query 3");
+                System.out.println("Something went wrong with the update on query 4");
                 return;
             }
             //Update rental
