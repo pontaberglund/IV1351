@@ -87,10 +87,14 @@ public class DbFunctions {
     public void CreateNewRental(Connection conn, String studentID, String instrumentID, String homeDelivery) {
         Statement statement;
         try {
+            statement = conn.createStatement();
+            //Lock the instrument_in_stock so no other person can try to rent it
+            String query3 = String.format("select * from instrument_in_stock where instrument_in_stock_id=%s for update", instrumentID);
+            statement.executeQuery(query3);
             //Add the rental
             String query1 = String.format("insert into rental(student_id, home_delivery, start_date, end_date)" +
                     " values ('%s', '%s', current_date, current_date + INTERVAL '12 month')", studentID, homeDelivery);
-            statement = conn.createStatement();
+
             int updatedRows = statement.executeUpdate(query1);
             if(updatedRows != 1) {
                 conn.rollback();
@@ -105,10 +109,7 @@ public class DbFunctions {
             if(rs.next())
                 latestRental = rs.getString("rental_id");
             //Connect the rental to wanted instrument
-            String query3 = String.format("select * from instrument_in_stock where instrument_in_stock_id=%s for update", instrumentID);
             String query4 = String.format("update instrument_in_stock set rental_id=%s where instrument_in_stock_id=%s", latestRental, instrumentID);
-            //Lock the instrument_in_stock
-            statement.executeQuery(query3);
             //Update the row
             updatedRows = statement.executeUpdate(query4);
             if(updatedRows != 1) {
@@ -176,6 +177,9 @@ public class DbFunctions {
             }
             System.out.println("Choose rental id");
             String rid = sc.next();
+            //Lock the instrument_in_stock
+            String query3 = String.format("select * from instrument_in_stock where rental_id=%s for update", rid);
+            statement.executeQuery(query3);
             //Get price of instrument
             String price_of_instrument = null;
             String query2 = String.format("select price from instrument_in_stock where rental_id=%s", rid);
@@ -183,9 +187,6 @@ public class DbFunctions {
             if(price.next())
                 price_of_instrument = price.getString("price");
             //Update instrument_in_stock
-            //Lock the instrument_in_stock
-            String query3 = String.format("select * from instrument_in_stock where rental_id=%s for update", rid);
-            statement.executeQuery(query3);
             String query4 = String.format("update instrument_in_stock set rental_id=null where rental_id=%s", rid);
             updatedRows = statement.executeUpdate(query4);
             if(updatedRows != 1) {
