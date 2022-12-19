@@ -150,7 +150,7 @@ public class DbFunctions {
         int r = 0;
         Statement statement;
         try{
-            String query = String.format("select count(*) from rental where student_id=%s group by student_id ", student_id);
+            String query = String.format("select count(*) from rental as r where r.end_date>current_date and student_id=%s group by r.student_id;", student_id);
             statement = conn.createStatement();
             ResultSet result = statement.executeQuery(query);
             if(result.next())
